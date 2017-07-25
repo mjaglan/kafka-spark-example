@@ -1,14 +1,25 @@
+*.class
+*.log
+
+# gradle specific
+.settings
 .gradle
+
+
+# Scala-IDE specific
+.scala_dependencies
+.worksheet
+/bin/
 /build/
 
-# Ignore Gradle GUI config
-gradle-app.setting
 
-# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
-!gradle-wrapper.jar
+# eclipse specific
+.cache-main
+.project
+.classpath
 
-# Cache of project
-.gradletasknamecache
 
-# # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
-# gradle/wrapper/gradle-wrapper.properties
+# application specific
+/checkpoint-consume/
+/checkpoint-produce/
+/resources/output/
