@@ -1,0 +1,105 @@
+// Because, “Could not find or load main class” error for Gradle-generated Scala JAR
+// LINK: http://stackoverflow.com/questions/43990707/could-not-find-or-load-main-class-error-for-gradle-generated-scala-jar
+// LINK: https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow/1.2.4
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "com.github.jengelman.gradle.plugins:shadow:1.2.4"
+  }
+}
+
+apply plugin: "com.github.johnrengelman.shadow"
+apply plugin: 'java'
+apply plugin: 'scala'
+apply plugin: 'eclipse'
+
+// Deafult jar creation disabled
+// because :shadowJar task is used
+jar.enabled = false
+
+// In this section you declare where to find the dependencies of your project
+repositories {
+	// Use 'jcenter' for resolving your dependencies.
+	// You can declare any Maven/Ivy/file repository here.
+	jcenter()
+	mavenCentral()
+	mavenLocal()
+}
+
+// Compiling a mixed Scala project with Gradle
+// LINK: https://chrismarks.wordpress.com/2013/07/31/compiling-a-mixed-scala-project-with-gradle/
+sourceSets.main.scala.srcDir "src/main/java"
+sourceSets.main.java.srcDirs = []
+
+// In this section you declare the dependencies for your production and test code
+dependencies {
+	// MAIN: Libraries for core development tasks
+	// The production code uses the SLF4J logging API at compile time
+	compile 'org.slf4j:slf4j-api:1.7.21'
+	
+	// https://mvnrepository.com/artifact/org.scala-lang/scala-compiler
+	compile group: 'org.scala-lang', name: 'scala-compiler', version: '2.10.6'
+
+	// https://mvnrepository.com/artifact/org.scala-lang/scala-library
+	compile group: 'org.scala-lang', name: 'scala-library', version: '2.10.6'
+	
+	// https://mvnrepository.com/artifact/org.scala-lang/scala-reflect
+	compile group: 'org.scala-lang', name: 'scala-reflect', version: '2.10.6'
+	
+	// https://mvnrepository.com/artifact/org.scala-lang/scala-swing
+	compile group: 'org.scala-lang', name: 'scala-swing', version: '2.10.6'
+	
+	// https://mvnrepository.com/artifact/org.apache.spark/spark-core_2.10
+	compile group: 'org.apache.spark', name: 'spark-core_2.10', version: '1.6.1'
+	
+	// https://mvnrepository.com/artifact/org.apache.spark/spark-sql_2.10
+	compile group: 'org.apache.spark', name: 'spark-sql_2.10', version: '1.6.1'
+	
+	// https://mvnrepository.com/artifact/org.apache.spark/spark-streaming_2.10
+	compile group: 'org.apache.spark', name: 'spark-streaming_2.10', version: '1.6.1'
+
+	// https://mvnrepository.com/artifact/org.apache.spark/spark-streaming-kafka_2.10
+	compile group: 'org.apache.spark', name: 'spark-streaming-kafka_2.10', version: '1.6.1'
+
+	// https://mvnrepository.com/artifact/org.apache.kafka/kafka_2.10
+	compile group: 'org.apache.kafka', name: 'kafka_2.10', version: '0.8.2.1'
+	
+	// https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients
+	compile group: 'org.apache.kafka', name: 'kafka-clients', version: '0.8.2.1'
+
+	// https://mvnrepository.com/artifact/org.apache.commons/commons-csv
+	compile group: 'org.apache.commons', name: 'commons-csv', version: '1.1'
+		
+	// https://mvnrepository.com/artifact/com.yammer.metrics/metrics-core
+	compile group: 'com.yammer.metrics', name: 'metrics-core', version: '2.2.0'
+	
+	// https://mvnrepository.com/artifact/com.databricks/spark-csv_2.10
+	compile group: 'com.databricks', name: 'spark-csv_2.10', version: '1.1.0'
+		
+	// https://mvnrepository.com/artifact/com.101tec/zkclient
+	compile group: 'com.101tec', name: 'zkclient', version: '0.3'
+	
+	// https://mvnrepository.com/artifact/org.apache.commons/commons-pool2
+	compile group: 'org.apache.commons', name: 'commons-pool2', version: '2.4.2'
+
+}
+
+// pack jar with all dependencies
+// reference: http://stackoverflow.com/questions/4871656/using-gradle-to-build-a-jar-with-dependencies
+shadowJar {
+	manifest {
+		attributes(
+			'Main-Class': 'edu.iu.soic.cs.entryPointJava'
+		)
+	}
+	zip64 true
+}
+
+// About Gradle Daemon: https://docs.gradle.org/2.4/userguide/gradle_daemon.html
+// Enable for one session: gradle --daemon
+// Permanently Enable (LINUX): touch ~/.gradle/gradle.properties && echo "org.gradle.daemon=true" >> ~/.gradle/gradle.properties
+// Disable for one session: gradle --no-daemon
