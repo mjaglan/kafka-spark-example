@@ -1,0 +1,1 @@
+All spark submit job related logs are present in this directory.
