@@ -1,5 +1,7 @@
 # spark kafka producer consumer example
 
+[![Build Status](https://travis-ci.org/mjaglan/kafka-spark-example.svg?branch=master)](https://travis-ci.org/mjaglan/kafka-spark-example)
+
 ## Problem Statement
 
 The customer runs a website and periodically is attacked by a botnet in a Distributed Denial of Service (DDOS) attack. Given a log file in Apache log format from a given attack, use it to build a simple real-time detector of DDOS attacks.
